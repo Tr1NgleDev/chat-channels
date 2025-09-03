@@ -8,8 +8,8 @@
 		"Tr1NgleDev"
 	],
 	"contact": {
-		"homepage": "https://tr1ngle.dev/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/Tr1NgleDev/chat-channels",
+		"sources": "https://github.com/Tr1NgleDev/chat-channels"
 	},
 	"license": "LGPL-3.0",
 	"icon": "assets/chat-channels/icon.png",
