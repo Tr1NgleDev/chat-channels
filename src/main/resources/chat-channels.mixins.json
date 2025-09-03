@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "dev.tr1ngle.chatchannels.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"SendChatMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
