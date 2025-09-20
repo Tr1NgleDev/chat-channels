@@ -1,0 +1,10 @@
+{
+	"text.autoconfig.chat-channels.title": "Конфигурация Chat Channels",
+	"text.autoconfig.chat-channels.option.switchChannelKey": "Клавиша Переключения Каналов",
+	"chat-channels.switchChannelText": "Нажмите [%s] для переключения между каналами.",
+	"chat-channels.public": "Публичный",
+	"chat-channels.team": "Команда",
+	"chat-channels.whisper": "Шёпот",
+	"chat-channels.currentChannel": "Текущий Канал: %s",
+	"chat-channels.tooManyChannels": "Слишком много каналов!"
+}

@@ -3,9 +3,11 @@
 	"id": "chat-channels",
 	"version": "${version}",
 	"name": "Chat Channels",
-	"description": "Adds a way to \"switch between channels\" in chat. That includes the Public channel (normal chat), whisper to players, team messages and whisper groups!",
+	"description": "Adds a way to \"switch between channels\" in chat. That includes the Public channel (normal chat), Team messages and Whisper to players (you can also multi-whisper)!",
 	"authors": [
-		"Tr1NgleDev"
+		"Tr1NgleDev",
+		"D4M5 (Polish Translation)",
+		"TRV (French Translation)"
 	],
 	"contact": {
 		"homepage": "https://github.com/Tr1NgleDev/chat-channels",
@@ -17,16 +19,24 @@
 	"entrypoints": {
 		"client": [
 			"dev.tr1ngle.chatchannels.ChatChannels"
+		],
+		"modmenu": [
+			"dev.tr1ngle.chatchannels.ModMenuConfig"
 		]
 	},
 	"mixins": [
 		"chat-channels.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.10",
+		"fabricloader": ">=0.17.2",
 		"minecraft": "~1.21.8",
 		"java": ">=21",
 		"fabric-api": "*",
-		"clientarguments": "*"
+		"clientarguments": "*",
+		"cloth-config2": "*"
+	},
+	"recommends":
+	{
+		"modmenu": "*"
 	}
 }

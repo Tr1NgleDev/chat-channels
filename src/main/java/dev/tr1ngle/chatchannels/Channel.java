@@ -8,8 +8,7 @@ public enum Channel implements StringIdentifiable
 {
 	PUBLIC("public"),
 	TEAM("team"),
-	PLAYER("player"),
-	GROUP("group"),
+	WHISPER("whisper"),
 	;
 
 	public static final Codec<Channel> CODEC = StringIdentifiable.createCodec(Channel::values);

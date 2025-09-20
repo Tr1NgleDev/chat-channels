@@ -3,7 +3,8 @@
 	"package": "dev.tr1ngle.chatchannels.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"SendChatMixin"
+		"SendChatMixin",
+		"ChatScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

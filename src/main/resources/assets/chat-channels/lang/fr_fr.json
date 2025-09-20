@@ -1,0 +1,10 @@
+{
+	"text.autoconfig.chat-channels.title": "Configuration de Chat Channels",
+	"text.autoconfig.chat-channels.option.switchChannelKey": "Touche de Changement de Canal",
+	"chat-channels.switchChannelText": "Appuyez sur [%s] pour basculer entre les canals.",
+	"chat-channels.public": "Publique",
+	"chat-channels.team": "Équipe",
+	"chat-channels.whisper": "Chuchoter",
+	"chat-channels.currentChannel": "Canal Actuel: %s",
+	"chat-channels.tooManyChannels": "Trop de Canals!"
+}

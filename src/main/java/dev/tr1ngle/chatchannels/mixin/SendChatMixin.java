@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.authlib.GameProfile;
 
+import dev.tr1ngle.chatchannels.ChannelData;
 import dev.tr1ngle.chatchannels.ChatChannels;
 
 @Mixin(value = ClientPlayNetworkHandler.class, priority = 1)
@@ -26,7 +27,8 @@ public abstract class SendChatMixin
 			return;
 		}
 
-		switch (ChatChannels.curChannel)
+		ChannelData curChannel = ChatChannels.getCurrentChannel();
+		switch (curChannel.type)
 		{
 			case PUBLIC:
 				return;
@@ -35,9 +37,8 @@ public abstract class SendChatMixin
 				tm = tm.trim();
 				sendChatCommand(tm);
 				break;
-			case PLAYER:
-			case GROUP:
-				for (GameProfile profile : ChatChannels.whisperPlayers)
+			case WHISPER:
+				for (GameProfile profile : curChannel.whisperPlayers)
 				{
 					String w = "w " + profile.getName() + " " + content;
 					w = w.trim();
