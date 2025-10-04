@@ -9,17 +9,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.tr1ngle.chatchannels.ChannelData;
 import dev.tr1ngle.chatchannels.ChatChannels;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.math.Rect2i;
 
 @Mixin(ChatScreen.class)
 public class ChatScreenMixin
 {
 	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-	public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir)
+	public void keyPressed(KeyInput input, CallbackInfoReturnable<Boolean> cir)
 	{
-		if (keyCode == ChatChannels.config.switchChannelKey.getKeyCode())
+		if (input.key() == ChatChannels.config.switchChannelKey.getKeyCode())
 		{
 			++ChatChannels.selectedChannel;
 			if (ChatChannels.selectedChannel >= ChatChannels.channels.size())
@@ -33,9 +35,9 @@ public class ChatScreenMixin
 	}
 
 	@Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
-	public void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir)
+	public void mouseClicked(Click click, boolean doubled, CallbackInfoReturnable<Boolean> cir)
 	{
-		if (button != GLFW.GLFW_MOUSE_BUTTON_LEFT)
+		if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT)
 		{
 			return;
 		}
@@ -49,7 +51,7 @@ public class ChatScreenMixin
 		{
 			int rectWidth = channelData.rectWidth;
 
-			if (new Rect2i(rectX, rectY, rectWidth, 12).contains((int)mouseX, (int)mouseY))
+			if (new Rect2i(rectX, rectY, rectWidth, 12).contains((int)click.x(), (int)click.y()))
 			{
 				ChatChannels.selectedChannel = ind;
 

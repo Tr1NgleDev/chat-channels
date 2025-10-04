@@ -70,7 +70,7 @@ public class ChatChannels implements ClientModInitializer
 				case WHISPER:
 					for (GameProfile profile : channelData.whisperPlayers)
 					{
-						channel += profile.getName() + ",";
+						channel += profile.name() + ",";
 					}
 					channel = channel.substring(0, channel.length() - 1);
 					break;
@@ -192,10 +192,10 @@ public class ChatChannels implements ClientModInitializer
 								String msg = "";
 								for (GameProfile profile : curChannel.whisperPlayers)
 								{
-									msg += profile.getName() + "; ";
+									msg += profile.name() + "; ";
 								}
 								msg = msg.substring(0, msg.length() - 2);
-								
+
 								context.getSource().sendFeedback(Text.translatable("chat-channels.currentChannel", Text.translatable("chat-channels.whisper").append(": " + msg)));
 								break;
 						}

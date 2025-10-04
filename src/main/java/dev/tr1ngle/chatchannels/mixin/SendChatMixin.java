@@ -40,7 +40,7 @@ public abstract class SendChatMixin
 			case WHISPER:
 				for (GameProfile profile : curChannel.whisperPlayers)
 				{
-					String w = "w " + profile.getName() + " " + content;
+					String w = "w " + profile.name() + " " + content;
 					w = w.trim();
 					sendChatCommand(w);
 				}
