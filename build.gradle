@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version "${loom_version}"
+	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
 	id 'maven-publish'
 }
 
@@ -30,7 +30,7 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
-	include modImplementation("dev.xpple:clientarguments:1.11.5")
+	include modImplementation("dev.xpple:clientarguments:1.11.6")
 
 	modApi("me.shedaniel.cloth:cloth-config-fabric:19.0.147")
 	{
