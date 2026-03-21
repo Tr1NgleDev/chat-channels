@@ -80,7 +80,7 @@ public class ChatChannels implements ClientModInitializer
 				channel = channel.substring(0, 18);
 				channel += "...";
 			}
-			
+
 			int channelWidth = textRenderer.getWidth(channel);
 			int rectWidth = 2 + channelWidth + 2;
 
@@ -96,8 +96,11 @@ public class ChatChannels implements ClientModInitializer
 
 			++ind;
 		}
-		
-		context.drawText(textRenderer, Text.translatable("chat-channels.switchChannelText", config.switchChannelKey.asString()), 2, rectY - 10, ColorHelper.withAlpha(0x7F, 0xFFFFFF), true);
+
+		if (config.showHelpText)
+		{
+			context.drawText(textRenderer, Text.translatable("chat-channels.switchChannelText", config.switchChannelKey.asString()), 2, rectY - 10, ColorHelper.withAlpha(0x7F, 0xFFFFFF), true);
+		}
 	}
 
 	public static void clearChannels()
@@ -169,6 +172,15 @@ public class ChatChannels implements ClientModInitializer
 		{
 			dispatcher.register(ClientCommandManager
 				.literal("channel")
+				.then(ClientCommandManager.literal("config")
+					.executes(context ->
+					{
+						MinecraftClient.getInstance().execute(() -> {
+							MinecraftClient.getInstance().setScreen(AutoConfig.getConfigScreen(ModConfig.class, MinecraftClient.getInstance().currentScreen).get());
+						});
+						return 1;
+					})
+				)
 				.then(ClientCommandManager.literal("clear")
 					.executes(context ->
 					{

@@ -1,6 +1,7 @@
 {
 	"text.autoconfig.chat-channels.title": "Chat Channels Config",
 	"text.autoconfig.chat-channels.option.switchChannelKey": "Switch Channel Key",
+	"text.autoconfig.chat-channels.option.showHelpText": "Show Help Text",
 	"chat-channels.switchChannelText": "Press [%s] to Switch Between Channels.",
 	"chat-channels.public": "Public",
 	"chat-channels.team": "Team",

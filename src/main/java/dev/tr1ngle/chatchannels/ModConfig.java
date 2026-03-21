@@ -9,6 +9,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 public class ModConfig implements ConfigData
 {
 	public Keybind switchChannelKey = Keybind.LeftAlt;
+	public boolean showHelpText = true;
 	
 	public static enum Keybind
 	{

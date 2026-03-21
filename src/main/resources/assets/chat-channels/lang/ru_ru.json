@@ -1,6 +1,7 @@
 {
 	"text.autoconfig.chat-channels.title": "Конфигурация Chat Channels",
 	"text.autoconfig.chat-channels.option.switchChannelKey": "Клавиша Переключения Каналов",
+	"text.autoconfig.chat-channels.option.showHelpText": "Показывать текст гайд",
 	"chat-channels.switchChannelText": "Нажмите [%s] для переключения между каналами.",
 	"chat-channels.public": "Публичный",
 	"chat-channels.team": "Команда",
