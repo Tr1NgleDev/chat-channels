@@ -1,5 +1,6 @@
 package dev.tr1ngle.chatchannels.mixin;
 
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -9,17 +10,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.tr1ngle.chatchannels.ChannelData;
 import dev.tr1ngle.chatchannels.ChatChannels;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.input.KeyInput;
-import net.minecraft.client.util.math.Rect2i;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.Rect2i;
 
 @Mixin(ChatScreen.class)
 public class ChatScreenMixin
 {
 	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-	public void keyPressed(KeyInput input, CallbackInfoReturnable<Boolean> cir)
+	public void keyPressed(KeyEvent input, CallbackInfoReturnable<Boolean> cir)
 	{
 		if (input.key() == ChatChannels.config.switchChannelKey.getKeyCode())
 		{
@@ -35,7 +36,7 @@ public class ChatScreenMixin
 	}
 
 	@Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
-	public void mouseClicked(Click click, boolean doubled, CallbackInfoReturnable<Boolean> cir)
+	public void mouseClicked(MouseButtonEvent click, boolean doubled, CallbackInfoReturnable<Boolean> cir)
 	{
 		if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT)
 		{
@@ -65,12 +66,12 @@ public class ChatScreenMixin
 		}
 	}
 
-	@Inject(method = "render", at = @At("HEAD"))
-	public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci)
+	@Inject(method = "extractRenderState", at = @At("HEAD"))
+	public void extractRenderState(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a, CallbackInfo ci)
 	{
 		int width = ((ChatScreen)(Object)this).width;
 		int height = ((ChatScreen)(Object)this).height;
 
-		ChatChannels.channelsRender(context, mouseX, mouseY, deltaTicks, width, height);
+		ChatChannels.channelsRender(graphics, mouseX, mouseY, a, width, height);
 	}
 }

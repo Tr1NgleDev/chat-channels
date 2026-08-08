@@ -1,15 +1,15 @@
 package dev.tr1ngle.chatchannels;
 
+import me.shedaniel.autoconfig.AutoConfigClient;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.ColorHelper;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.ARGB;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,15 +41,15 @@ public class ChatChannels implements ClientModInitializer
 		return channels.get(selectedChannel);
 	}
 
-	public static void drawRect(DrawContext context, int x, int y, int width, int height, int color)
+	public static void drawRect(final GuiGraphicsExtractor graphics, int x, int y, int width, int height, int color)
 	{
-		context.fill(x, y, width + x, height + y, color);
+		graphics.fill(x, y, width + x, height + y, color);
 	}
 
-	public static void channelsRender(DrawContext context, int mouseX, int mouseY, float deltaTicks, int width, int height)
+	public static void channelsRender(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a, int width, int height)
 	{
-		MinecraftClient client = MinecraftClient.getInstance();
-		TextRenderer textRenderer = client.textRenderer;
+		Minecraft client = Minecraft.getInstance();
+		Font textRenderer = client.font;
 
 		int rectX = 2;
 		int rectY = height - 16 - 12;
@@ -62,10 +62,10 @@ public class ChatChannels implements ClientModInitializer
 			switch (channelData.type)
 			{
 				case PUBLIC:
-					channel = Text.translatable("chat-channels.public").getString();
+					channel = Component.translatable("chat-channels.public").getString();
 					break;
 				case TEAM:
-					channel = Text.translatable("chat-channels.team").getString();
+					channel = Component.translatable("chat-channels.team").getString();
 					break;
 				case WHISPER:
 					for (GameProfile profile : channelData.whisperPlayers)
@@ -81,15 +81,15 @@ public class ChatChannels implements ClientModInitializer
 				channel += "...";
 			}
 
-			int channelWidth = textRenderer.getWidth(channel);
+			int channelWidth = textRenderer.width(channel);
 			int rectWidth = 2 + channelWidth + 2;
 
 			if (selected)
 			{
-				drawRect(context, rectX - 1, rectY - 1, rectWidth + 2, 12 + 2, ColorHelper.withAlpha(0xAF, 0xFFFFFF));
+				drawRect(graphics, rectX - 1, rectY - 1, rectWidth + 2, 12 + 2, ARGB.color(0xAF, 0xFFFFFF));
 			}
-			drawRect(context, rectX, rectY, rectWidth, 12, selected ? ColorHelper.withAlpha(0xFF, 0x000000) : ColorHelper.withAlpha(0x7F, 0x000000));
-			context.drawText(textRenderer, Text.of(channel), rectX + 2, rectY + 2, selected ? ColorHelper.withAlpha(0xFF, 0xFFFFFF) : ColorHelper.withAlpha(0x7F, 0xFFFFFF), true);
+			drawRect(graphics, rectX, rectY, rectWidth, 12, selected ? ARGB.color(0xFF, 0x000000) : ARGB.color(0x7F, 0x000000));
+			graphics.text(textRenderer, Component.nullToEmpty(channel), rectX + 2, rectY + 2, selected ? ARGB.color(0xFF, 0xFFFFFF) : ARGB.color(0x7F, 0xFFFFFF), true);
 
 			rectX += rectWidth + 1;
 			channelData.rectWidth = rectWidth;
@@ -99,7 +99,7 @@ public class ChatChannels implements ClientModInitializer
 
 		if (config.showHelpText)
 		{
-			context.drawText(textRenderer, Text.translatable("chat-channels.switchChannelText", config.switchChannelKey.asString()), 2, rectY - 10, ColorHelper.withAlpha(0x7F, 0xFFFFFF), true);
+			graphics.text(textRenderer, Component.translatable("chat-channels.switchChannelText", config.switchChannelKey.asString()), 2, rectY - 10, ARGB.color(0x7F, 0xFFFFFF), true);
 		}
 	}
 
@@ -170,35 +170,35 @@ public class ChatChannels implements ClientModInitializer
 		});
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
 		{
-			dispatcher.register(ClientCommandManager
+			dispatcher.register(ClientCommands
 				.literal("channel")
-				.then(ClientCommandManager.literal("config")
+				.then(ClientCommands.literal("config")
 					.executes(context ->
 					{
-						MinecraftClient.getInstance().execute(() -> {
-							MinecraftClient.getInstance().setScreen(AutoConfig.getConfigScreen(ModConfig.class, MinecraftClient.getInstance().currentScreen).get());
+						Minecraft.getInstance().execute(() -> {
+							Minecraft.getInstance().setScreenAndShow(AutoConfigClient.getConfigScreen(ModConfig.class, Minecraft.getInstance().gui.screen()).get());
 						});
 						return 1;
 					})
 				)
-				.then(ClientCommandManager.literal("clear")
+				.then(ClientCommands.literal("clear")
 					.executes(context ->
 					{
 						clearChannels();
 						return 1;
 					})
 				)
-				.then(ClientCommandManager.literal("get")
+				.then(ClientCommands.literal("get")
 					.executes(context ->
 					{
 						ChannelData curChannel = getCurrentChannel();
 						switch (curChannel.type)
 						{
 							case PUBLIC:
-								context.getSource().sendFeedback(Text.translatable("chat-channels.currentChannel", Text.translatable("chat-channels.public")));
+								context.getSource().sendFeedback(Component.translatable("chat-channels.currentChannel", Component.translatable("chat-channels.public")));
 								break;
 							case TEAM:
-								context.getSource().sendFeedback(Text.translatable("chat-channels.currentChannel", Text.translatable("chat-channels.team")));
+								context.getSource().sendFeedback(Component.translatable("chat-channels.currentChannel", Component.translatable("chat-channels.team")));
 								break;
 							case WHISPER:
 								String msg = "";
@@ -208,30 +208,30 @@ public class ChatChannels implements ClientModInitializer
 								}
 								msg = msg.substring(0, msg.length() - 2);
 
-								context.getSource().sendFeedback(Text.translatable("chat-channels.currentChannel", Text.translatable("chat-channels.whisper").append(": " + msg)));
+								context.getSource().sendFeedback(Component.translatable("chat-channels.currentChannel", Component.translatable("chat-channels.whisper").append(": " + msg)));
 								break;
 						}
 						return 1;
 					})
 				)
-				.then(ClientCommandManager.literal("set")
-					.then(ClientCommandManager.literal("public")
+				.then(ClientCommands.literal("set")
+					.then(ClientCommands.literal("public")
 						.executes(context ->
 						{
 							setChannel(new ChannelData(Channel.PUBLIC, new HashSet<>()));
 							return 1;
 						}))
-					.then(ClientCommandManager.literal("team")
+					.then(ClientCommands.literal("team")
 						.executes(context ->
 						{
 							if (!setChannel(new ChannelData(Channel.TEAM, new HashSet<>())))
 							{
-								context.getSource().sendFeedback(Text.translatable("chat-channels.tooManyChannels"));
+								context.getSource().sendFeedback(Component.translatable("chat-channels.tooManyChannels"));
 							}
 							return 1;
 						}))
-					.then(ClientCommandManager.literal("whisper")
-						.then(ClientCommandManager.argument("players", ListArgument.of(CGameProfileArgument.gameProfile()))
+					.then(ClientCommands.literal("whisper")
+						.then(ClientCommands.argument("players", ListArgument.of(CGameProfileArgument.gameProfile()))
 							.executes(context ->
 							{
 								Set<GameProfile> whisperPlayers = new HashSet<>();
@@ -244,7 +244,7 @@ public class ChatChannels implements ClientModInitializer
 
 								if (!setChannel(new ChannelData(Channel.WHISPER, whisperPlayers)))
 								{
-									context.getSource().sendFeedback(Text.translatable("chat-channels.tooManyChannels"));
+									context.getSource().sendFeedback(Component.translatable("chat-channels.tooManyChannels"));
 								}
 
 								return 1;

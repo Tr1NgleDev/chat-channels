@@ -1,17 +1,16 @@
 package dev.tr1ngle.chatchannels;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.util.StringRepresentable;
 
-import net.minecraft.util.StringIdentifiable;
-
-public enum Channel implements StringIdentifiable
+public enum Channel implements StringRepresentable
 {
 	PUBLIC("public"),
 	TEAM("team"),
 	WHISPER("whisper"),
 	;
 
-	public static final Codec<Channel> CODEC = StringIdentifiable.createCodec(Channel::values);
+	public static final Codec<Channel> CODEC = StringRepresentable.fromEnum(Channel::values);
 
 	private final String name;
 
@@ -21,7 +20,7 @@ public enum Channel implements StringIdentifiable
 	}
 
 	@Override
-	public String asString()
+	public String getSerializedName()
 	{
 		return name;
 	}
